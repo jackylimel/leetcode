@@ -11,19 +11,40 @@ public class TreeNode {
     }
 }
 
+public struct BinarySearchTree {
+    public private(set) var root: TreeNode? = nil
+    public init() {}
+
+    mutating public func insert(_ value: Int) {
+        root = insert(from: root, value: value)
+    }
+
+    private func insert(from node: TreeNode?, value: Int) -> TreeNode {
+        guard let node = node else {
+            return TreeNode(value)
+        }
+        if value < node.val {
+            node.left = insert(from: node.left, value: value)
+        } else {
+            node.right = insert(from: node.right, value: value)
+        }
+        return node
+    }
+}
+
 extension TreeNode {
-    public func inorderTraversal(root: TreeNode) -> [Int] {
+    public func inorderTraversal() -> [Int] {
         var result: [Int] = []
         var stack: Stack<TreeNode> = Stack()
-        var node: TreeNode? = root
-        while (node != nil || !stack.isEmpty()) {
+        var node: TreeNode? = self
+        while(node != nil || !stack.isEmpty()) {
             while(node != nil) {
                 stack.push(node!)
                 node = node!.left
             }
             node = stack.pop()
             result.append(node!.val)
-            node = node?.right
+            node = node!.right
         }
         return result
     }
